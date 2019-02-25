@@ -6,10 +6,12 @@ class MentionMailer < ActionMailer::Base
   include ApplicationHelper
 
   def self.default_url_options
-    Mailer.default_url_options
+     host_name = Setting.host_name
+     host_name = host_name.to_s.gsub(%r{\/.*$}, '') unless Redmine::Utils.relative_url_root.blank?
+     { host: host_name, protocol: Setting.protocol }
   end
-  
-  
+
+
   def notify_mentioning(issue, journal, user)
     @issue = issue
     @journal = journal
